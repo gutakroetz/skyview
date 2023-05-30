@@ -55,9 +55,9 @@
                 }
                 
                 try{
-                    fetch('https://server.com', {
+                    fetch('https://us-central1-skyview-387116.cloudfunctions.net/nopano', {
 
-                        data: {'return': `${x},${y}`},  // your request format
+                        data: {'request': `${x},${y}`},  // your request format
 
                         // dont care much about this part, it sends the request to your cloud function and parses the response
                             method: 'POST',
