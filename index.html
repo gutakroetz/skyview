@@ -1,1 +1,95 @@
+<html> 
+<head>
+    <meta charset="utf-8" />
+    <title> Title </title>
+    <!-- <meta name="google-site-verification" content="xxxxxxxxxxxxx-xxxxxxxxxxxxxxxxx-xxxxxxxxxxx" /> -->
+    
+  
+</head>
 
+<body>
+    <div id="root">
+        <div>
+            <!-- THE INPUT LONGITUDE VALUE -->
+            <form>
+                <label for="x_coord">X coordinate:</label>
+                <input type="number" id="x_coord_id" name="x_coord" onchange="control_lon()"><br><br>
+              </form>
+
+              <!-- SCRIPT THAT CONTROLS THE INPUT LONGITUDE VALUE -->
+              <script>
+                function control_lon(){
+                    /*
+                        Function that controls that the x value in the input field is between -180 and 180
+                    */
+                   var limit = 180;
+                    var lon_input = document.querySelector('#x_coord_id')  // getting the input field element
+                    var lon = parseFloat(document.querySelector('#x_coord_id').value);  // getting the value
+                    // controlling that the value is within the limit
+                    if (lon>limit){
+                        return limit;
+                    }
+                    if (lon<-limit){
+                        return -limit;
+                    }
+                    return lon;
+                }
+              </script>
+              
+            <!-- SUBMIT BUTTON -->
+            <button onclick="
+
+            // your input values
+            let y = 40.3;
+            let x = document.querySelector('#x_coord_id').value;
+
+            console.log(`submit ${x}, ${y}`);
+
+                let img = document.querySelector('#preview');
+                if (img==null){
+                    // create an image if it doesn't exist in the html
+                    img = document.createElement('img');
+                    img.height = 300; // set image height in pixels
+                    img.className = 'outputimage';  // set image classname, optional
+                    document.querySelector('#root').appendChild(img)  // add the image to the html
+                }
+                
+                try{
+                    fetch('https://server.com', {
+
+                        data: {'return': `${x},${y}`},  // your request format
+
+                        // dont care much about this part, it sends the request to your cloud function and parses the response
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': '*',
+                                'Access-Control-Allow-Headers': '*'
+                            },
+                            mode: 'cors',
+                                }).then(result => {
+                                    if (result.status == 200) {
+                                        result.json().then(result=>{
+                                            console.log(result);
+                                            img.src = `data:image/png;base64,${result['content']}`;
+                                            return result;})
+                        
+                                    }
+                                    else {
+                                        console.log(result);
+                                        console.log(`CODE: ${result.status}`);
+                                    }
+                                    return;
+                                });
+                                    }
+                                catch (e) {
+                                    console.log(e);
+                                    return new Promise((res) => res({ content: ['A', 'B'] }));
+                                };
+                           
+                       ">Submit</button>
+          </div>
+    </div>
+</body>
+</html> 
